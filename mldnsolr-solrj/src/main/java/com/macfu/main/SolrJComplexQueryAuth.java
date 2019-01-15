@@ -48,7 +48,7 @@ public class SolrJComplexQueryAuth {
         System.out.println("【数据行数】" + documents.getNumFound());
         System.out.println("------ 普通的数据查询 ------");
         for (SolrDocument doc : documents) {
-            System.out.println("【返回信息】id =" + doc.get("id") + "，name=" + doc.get("solr_s_name") + "， catalog =" + doc.get("solr_s_catalog") + "，provider = " + doc.get("solr_s_provider"))
+            System.out.println("【返回信息】id =" + doc.get("id") + "，name=" + doc.get("solr_s_name") + "， catalog =" + doc.get("solr_s_catalog") + "，provider = " + doc.get("solr_s_provider"));
         }
         System.out.println("------ 显示高亮查询内容 ------");
         Map<String, Map<String, List<String>>> map = response.getHighlighting();
