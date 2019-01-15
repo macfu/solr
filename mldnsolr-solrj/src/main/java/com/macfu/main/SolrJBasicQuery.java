@@ -1,4 +1,4 @@
-package com.macfu;
+package com.macfu.main;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
