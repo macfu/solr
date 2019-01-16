@@ -2,9 +2,13 @@ package com.macfu.util;
 
 import com.macfu.interceptor.AuthRequestInterceptor;
 import org.apache.http.client.HttpClient;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpClientUtil;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: liming
@@ -22,7 +26,15 @@ public class SolrConnectionUtil {
 
     private SolrConnectionUtil(){}
 
-    public static HttpSolrClient getClient() {
+    public static CloudSolrClient getClient() {
+        List<String> solrHostList = new ArrayList<>();
+        solrHostList.add("http://912.168.188.160:80/solr");
+        solrHostList.add("http://912.168.188.161:80/solr");
+        solrHostList.add("http://912.168.188.162:80/solr");
+        solrHostList.add("http://912.168.188.163:80/solr");
+        solrHostList.add("http://912.168.188.164:80/solr");
+        solrHostList.add("http://912.168.188.165:80/solr");
+
         ModifiableSolrParams initParams = new ModifiableSolrParams();
         initParams.set(HttpClientUtil.PROP_BASIC_AUTH_USER, USER_NAME);
         initParams.set(HttpClientUtil.PROP_BASIC_AUTH_PASS, PASSWORD);
@@ -38,9 +50,12 @@ public class SolrConnectionUtil {
         HttpClientUtil.addRequestInterceptor(new AuthRequestInterceptor());
         // 根据配置的初始化参数创建httpclient对象
         HttpClient httpClient = HttpClientUtil.createClient(initParams);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(SOLR_HOST_URL).withConnectionTimeout(CONNECTION_TIMEOUT)
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(SOLR_HOST_URL).withConnectionTimeout(CONNECTION_TIMEOUT)
+//                .withSocketTimeout(SOCKET_TIMEOUT).withHttpClient(httpClient).build();
+//        return solrClient;
+        CloudSolrClient cloudSolrClient = new CloudSolrClient.Builder(solrHostList).withConnectionTimeout(CONNECTION_TIMEOUT)
                 .withSocketTimeout(SOCKET_TIMEOUT).withHttpClient(httpClient).build();
-        return solrClient;
+        return cloudSolrClient;
     }
 
 }

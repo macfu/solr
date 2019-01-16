@@ -1,6 +1,7 @@
 package com.macfu.main.index;
 
 import com.macfu.util.SolrConnectionUtil;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
@@ -14,7 +15,7 @@ import java.util.Date;
  */
 public class SolrAddDocument {
     public static void main(String[] args) throws Exception {
-        HttpSolrClient solrClient = SolrConnectionUtil.getClient();
+        CloudSolrClient solrClient = SolrConnectionUtil.getClient();
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", "99");
         document.addField("solr_s_name", "好吃的");
