@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 /**
  * @Author: liming
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 @Scope("prototype")
 @PropertySource("classpath:config/solr.properties")
+@EnableSolrRepositories(basePackages={"com.macfu.dao"})
 public class SolrConfig {
     @Value("${solr.host.url}")
     private String solrHostUrl;
