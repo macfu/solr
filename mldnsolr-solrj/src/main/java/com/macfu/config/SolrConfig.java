@@ -2,6 +2,7 @@ package com.macfu.config;
 
 import com.macfu.interceptor.AuthRequestInterceptor;
 import org.apache.http.client.HttpClient;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpClientUtil;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -11,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
+
+import java.util.List;
 
 /**
  * @Author: liming
@@ -22,8 +25,10 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 @PropertySource("classpath:config/solr.properties")
 @EnableSolrRepositories(basePackages={"com.macfu.dao"})
 public class SolrConfig {
-    @Value("${solr.host.url}")
-    private String solrHostUrl;
+    @Value("#{'${solr.host.url}'.split(',')}")
+    private List<String> solrHostList;
+    @Value("${solr.collection.name}")
+    private String collectionName;
     @Value("${solr.host.username}")
     private String username;
     @Value("${solr.host.password}")
@@ -38,7 +43,7 @@ public class SolrConfig {
     private int preConnection = 1000;
 
     @Bean(name = "solrClient")
-    public HttpSolrClient getClient() {
+    public CloudSolrClient getClient() {
         ModifiableSolrParams initParams = new ModifiableSolrParams();
         initParams.set(HttpClientUtil.PROP_BASIC_AUTH_USER, this.username);
         initParams.set(HttpClientUtil.PROP_BASIC_AUTH_PASS, this.password);
@@ -52,11 +57,15 @@ public class SolrConfig {
         initParams.set(HttpClientUtil.PROP_MAX_CONNECTIONS_PER_HOST, this.preConnection);
         // 进行请求拦截器
         HttpClientUtil.addRequestInterceptor(new AuthRequestInterceptor());
-        // 根据配置的初始化参数创建httpclient对象
+//        // 根据配置的初始化参数创建httpclient对象
         HttpClient httpClient = HttpClientUtil.createClient(initParams);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(this.solrHostUrl).withConnectionTimeout(this.connectionTimeout)
-                .withSocketTimeout(this.socketTimeout).withHttpClient(httpClient).build();
-        return solrClient;
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(this.solrHostUrl).withConnectionTimeout(this.connectionTimeout)
+//                .withSocketTimeout(this.socketTimeout).withHttpClient(httpClient).build();
+//        return solrClient;
+        CloudSolrClient cloudSolrClient = new CloudSolrClient.Builder(this.solrHostList).withConnectionTimeout(this.connectionTimeout)
+                .withConnectionTimeout(this.socketTimeout).withHttpClient(httpClient).build();
+        cloudSolrClient.setDefaultCollection(this.collectionName);
+        return cloudSolrClient;
     }
 
 }

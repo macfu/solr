@@ -2,6 +2,7 @@ package com.macfu.po;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @Date: 2019/01/16 11:23
  * @Description:
  */
+@SolrDocument(collection = "mldncloud")
 public class Goods implements Serializable {
     @Id
     @Indexed(name = "id")
@@ -31,6 +33,6 @@ public class Goods implements Serializable {
     private Date recdate;
     @Indexed(name = "solr_i_isdelet")
     private Integer isdelet;
-    @Indexed(name = "gook_keyword")
+    @Indexed(name = "gook_keywords")
     private String keyword;
 }
